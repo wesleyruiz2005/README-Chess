@@ -1,0 +1,6 @@
+numpy>=1.24
+pillow>=10.0
+scipy>=1.10
+chess>=1.10        # --random, position validation, and the README-chess game
+cairosvg>=2.7      # optional, only to rasterize the SVG in tests
+PyGithub>=2.0      # only for the README-chess GitHub Action (issue API)
