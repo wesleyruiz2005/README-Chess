@@ -117,7 +117,10 @@ def render_board_gif(fen: str, scale: int = 2) -> None:
 
 def _board_embed() -> str:
     rel = BOARD_GIF.relative_to(ROOT).as_posix()
-    return f'<p align="center"><img src="{rel}" alt="voxel chess board" width="520"></p>\n'
+    # ?v=<timestamp> busts the GitHub/browser image cache: same filename each
+    # move would otherwise show a stale frame until the cache expires.
+    v = datetime.now().strftime("%Y%m%d%H%M%S")
+    return f'<p align="center"><img src="{rel}?v={v}" alt="voxel chess board" width="520"></p>\n'
 
 
 # ----------------------------------------------------------------- state io
@@ -272,7 +275,7 @@ def main(issue, issue_author, repo_owner):
             return False, "ERROR: Board is invalid!"
 
         labels = ["⚔️ Capture!"] if gameboard.is_capture(move) else []
-        labels += ["White(clear)" if gameboard.turn == chess.WHITE else "Black(solid)"]
+        labels += ["White" if gameboard.turn == chess.WHITE else "Black"]
         issue.create_comment(C["successful_move"].format(author=issue_author, move=action[1]))
         issue.edit(state="closed", labels=labels)
 
@@ -294,8 +297,8 @@ def main(issue, issue_author, repo_owner):
     print(game, file=open(current, "w"), end="\n\n")
 
     if gameboard.is_game_over():
-        outcome = {"1/2-1/2": "It's a draw", "1-0": "White(clear) wins",
-                   "0-1": "Black(solid) wins"}.get(gameboard.result(), "UNKNOWN")
+        outcome = {"1/2-1/2": "It's a draw", "1-0": "White wins",
+                   "0-1": "Black wins"}.get(gameboard.result(), "UNKNOWN")
         lines = (DATA / "last_moves.txt").read_text().splitlines()
         pattern = re.compile(r".*: (@[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})", re.I)
         players = {re.match(pattern, ln).group(1) for ln in lines if re.match(pattern, ln)}
@@ -311,7 +314,7 @@ def main(issue, issue_author, repo_owner):
     readme = replace_text_between(readme, M["board"], _board_embed())
     readme = replace_text_between(readme, M["moves"], generate_moves_list(gameboard))
     readme = replace_text_between(readme, M["turn"],
-                                  "white(clear)" if gameboard.turn == chess.WHITE else "black(solid)")
+                                  "white" if gameboard.turn == chess.WHITE else "black")
     readme = replace_text_between(readme, M["last_moves"], generate_last_moves())
     readme = replace_text_between(readme, M["top_moves"], generate_top_moves())
     README.write_text(readme, encoding="utf-8")

@@ -20,10 +20,10 @@ commits the result. White moves first, and you can't move twice in a row.
 
 > [**♟️ Start a new game**](https://github.com/wesleyruiz2005/README-Chess/issues/new?title=Chess%3A+Start+new+game&body=Please+do+not+change+the+title.+Just+click+%22Submit+new+issue%22.+You+don%27t+need+to+do+anything+else+%3AD)
 
-It's <!-- BEGIN TURN -->black(solid)<!-- END TURN --> turn.
+It's <!-- BEGIN TURN -->black<!-- END TURN --> turn.
 
 <!-- BEGIN CHESS BOARD -->
-<p align="center"><img src="images/chess.gif" alt="voxel chess board" width="520"></p>
+<p align="center"><img src="images/chess.gif?v=1" alt="voxel chess board" width="520"></p>
 <!-- END CHESS BOARD -->
 
 **▸ Your move** (appears once a game starts)
